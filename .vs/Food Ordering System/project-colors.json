@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "c4ea73b4-eebb-45fe-8020-0ad1d58991dc": {
+      "ProjectGuid": "c4ea73b4-eebb-45fe-8020-0ad1d58991dc",
+      "DisplayName": "Food Ordering System",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

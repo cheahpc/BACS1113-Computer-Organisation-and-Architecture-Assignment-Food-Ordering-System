@@ -1,0 +1,101 @@
+Microsoft (R) Macro Assembler Version 14.12.25834.0	    10/01/18 12:43:52
+..\ch13\IndexOf_asm\indexof.asm				     Page 1 - 1
+
+
+				; IndexOf function      (IndexOf.asm)
+
+				.586
+				.model flat,C
+				IndexOf PROTO,
+					srchVal:DWORD, arrayPtr:PTR DWORD, count:DWORD
+
+ 00000000			.code
+				;-----------------------------------------------
+ 00000000			IndexOf PROC uses ecx esi edi,
+					srchVal:DWORD, arrayPtr:PTR DWORD, count:DWORD
+				;
+				; Performs a linear search of a 32-bit integer array,
+				; looking for a specific value. If the value is found,
+				; the matching index position is returned in EAX; 
+				; otherwise, EAX equals -1.
+				;-----------------------------------------------
+ =-00000001				NOT_FOUND = -1
+
+ 00000000  55		   *	    push   ebp
+ 00000001  8B EC	   *	    mov    ebp, esp
+ 00000003  51		   *	    push   ecx
+ 00000004  56		   *	    push   esi
+ 00000005  57		   *	    push   edi
+ 00000006  8B 45 08		 	mov  eax,srchVal    			; search value
+ 00000009  8B 4D 10		 	mov  ecx,count      			; array size
+ 0000000C  8B 75 0C			mov  esi,arrayPtr
+ 0000000F  BF 00000000			mov  edi,0						; index
+
+ 00000014  39 04 BE		L1: cmp  [esi+edi*4],eax
+ 00000017  74 0A			je   found
+ 00000019  47				inc	 edi
+ 0000001A  E2 F8			loop L1
+
+ 0000001C			notFound:	
+ 0000001C  B8 FFFFFFFF		     mov  eax,NOT_FOUND
+ 00000021  EB 02		     jmp  short exit
+
+ 00000023			found:
+ 00000023  8B C7		     mov	eax,edi
+
+ 00000025			exit:
+					 ret			; EDI contains the index
+ 00000025  5F		   *	    pop    edi
+ 00000026  5E		   *	    pop    esi
+ 00000027  59		   *	    pop    ecx
+ 00000028  C9		   *	    leave  
+ 00000029  C3		   *	    ret    00000h
+ 0000002A			IndexOf ENDP
+				END
+
+Microsoft (R) Macro Assembler Version 14.12.25834.0	    10/01/18 12:43:52
+..\ch13\IndexOf_asm\indexof.asm				     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000002A Para	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+IndexOf  . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000002A Public C
+  srchVal  . . . . . . . . . . .	DWord	 bp + 00000008
+  arrayPtr . . . . . . . . . . .	DWord	 bp + 0000000C
+  count  . . . . . . . . . . . .	DWord	 bp + 00000010
+  L1 . . . . . . . . . . . . . .	L Near	 00000014 _TEXT	
+  notFound . . . . . . . . . . .	L Near	 0000001C _TEXT	
+  found  . . . . . . . . . . . .	L Near	 00000023 _TEXT	
+  exit . . . . . . . . . . . . .	L Near	 00000025 _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000001h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+NOT_FOUND  . . . . . . . . . . .	Number	 -00000001h   
+
+	   0 Warnings
+	   0 Errors
