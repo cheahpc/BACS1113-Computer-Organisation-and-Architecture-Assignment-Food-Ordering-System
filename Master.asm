@@ -6,7 +6,60 @@ INCLUDE macros.inc
 ; ================================================================ VARIABLES
 .data
 ; |^^^^^^^^^^^^^^^^^^^^^ Chuan Yan ^^^^^^^^^^^^^^^^^^^^^|   | Data
+    design			byte	"					//////////////////////////////////////////" , 0
+	design1			byte	"					//					//" , 0
+	design2			byte	"					//		Signup / Login		//" , 0	
+	design3			byte	"					//	    Sample User			//" , 0
+	design4			byte	"					//	    -----------			//" , 0
+	design5			byte	"					//	    Username: " , 0
+	design6			byte	"					//	    Password: " , 0
+	design7			byte	"		//" , 0
+	design8			byte	"////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////" , 0
+	design9			byte	"					//		Sign Up Page		//" , 0
+	design10		byte	"					//		Login Page		//" , 0
+	menu			byte	"					//		1. Create User		//" , 0
+	menu1			byte	"					//		2. Login		//" , 0
+	menu2			byte	"					//	1. Move to New Username.	//" , 0
+	menu3			byte	"					//	2. Move to New Password.	//" , 0
+	menu4			byte	"					//	3. Move to Confirm Password.	//" , 0
+	menu5			byte	"					//	4. Move to Login.		//" , 0
+	menu6			byte	"					//	1. Move to Create User.		//" , 0
+	menu7			byte	"					//	2. Move to Username.		//" , 0
+	menu8			byte	"					//	3. Move to Password.		//" , 0
+	menu9			byte	"					//	2. Move to Login.		//" , 0
+	menu10			byte	"					//	3. Move to Login.		//" , 0
+	
+	choose			byte	"Please enter 1 or 2: " , 0
+	choose1			byte	"Please enter 1, 2, 3 or 4: " , 0
+	choose2			byte	"Please enter 1, 2 or 3: " , 0
+	new_user	  	byte	"New Username: " , 0
+	new_pw		  	byte	"New Password: " , 0
+	confirm_pw		byte	"Confirm Password: " , 0
+	username  		byte	"Username: " , 0
+	password  		byte	"Password: " , 0
 
+
+	valid_ck		byte	"Invalid input. Please enter '1' or '2' only." , 0
+	valid_ck1		byte	"Invalid input. Please enter '1', '2', '3' or '4' only." , 0
+	valid_ck2		byte	"Invalid input. Please enter '1', '2' or '3' only." , 0
+	invalid_length	byte	"Invalid length of username. Please create username with length of 5." , 0
+	invalid_length1	byte	"Invalid length of password. Please create password with length of 8." , 0
+	invalid_length2	byte	"Invalid length of username. Please enter username with length of 5." , 0
+	invalid_length3	byte	"Invalid length of password. Please enter password with length of 8." , 0
+	user_create		byte	"User successfully created. Please login now." , 0
+	error_confirm	byte	"Wrong password. Please enter new password again." , 0
+	invalid			byte	"Invalid Username." , 0
+	invalid1		byte	"Invalid Password." , 0
+	log_success		byte	"Iogin success." , 0
+	
+	decision		byte	?
+	test_user		byte	"test0" , 0
+	test_pw			byte	"abc12345" , 0
+	save_user		byte	6 DUP(?) , 0
+	save_pw			byte	9 DUP(?) , 0
+	temp0			byte	9 DUP(?) , 0
+	user			byte  	6 DUP(?) , 0
+	temp1			byte  	9 DUP(?) , 0
 ; |_____________________ Chuan Yan _____________________|   | Data
 
 ; |^^^^^^^^^^^^^^^^^^^^^ Pin Chee ^^^^^^^^^^^^^^^^^^^^^|    | Data
@@ -36,6 +89,9 @@ INCLUDE macros.inc
 
 ; ================================================================ MAIN
 .code
+; |^^^^^^^^^^^^^^^^^^^^^ Chuan Yan ^^^^^^^^^^^^^^^^^^^^^|   | UDF
+
+; |_____________________ Chuan Yan _____________________|   | UDF
 
 ; |^^^^^^^^^^^^^^^^^^^^^ Pin Chee ^^^^^^^^^^^^^^^^^^^^^|    | UDF
 updateMenuCounter proc
@@ -366,6 +422,751 @@ printMenu endp
 main proc
 
 ; |^^^^^^^^^^^^^^^^^^^^^ Chuan Yan ^^^^^^^^^^^^^^^^^^^^^|   | Proc
+;---------------Display Title-----------------------
+title:
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+	lea		edx , design1
+	call	WriteString				
+	call	Crlf
+	lea		edx , design2
+	call	WriteString				
+	call	Crlf
+	lea		edx , design1
+	call	WriteString				
+	call	Crlf
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+
+;---------------Display Menu----------------------
+menu_0:
+	call	crlf				; new line
+	lea		edx , design		; the offset adress of design is loaded to edx register
+	call	WriteString			; perform the write string function	
+	call	Crlf
+	lea		edx , menu
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu1
+	call	WriteString				
+	call	Crlf
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+
+;---------------Make Decision-------------------------
+decide:	
+	call Crlf
+	lea		edx , design8
+	call	WriteString	
+	call	Crlf
+	call	Crlf
+	mov		edx , OFFSET choose		
+	call	WriteString				
+	call	ReadChar				; Read user input
+	call	WriteChar				; Display user input
+    mov		decision , al			
+	call	Crlf					
+	jmp		check					; Force jump to check
+
+;------------------Validate Check User Decision-----------------------------
+check:
+	cmp		decision , '1'										; Compare user input decision = '1'
+	je		clear_scr											; Jump to clear_scr if equal to '1'
+
+	cmp		decision , '2'										; Compare user input decision = '2'
+	je		clear_scr1											; Jump to clear_scr if equal to '2'
+
+	lea		edx , valid_ck
+	call	WriteString											; Display Invalid if not '1' or '2'
+	
+	call	Crlf												; New line
+	jmp		decide												; Force jump to decide if not '1' or '2'
+
+;------------------To Clear Screen Before Force Jump-----------------------------
+clear_scr:
+	call	Clrscr			; Clear screen
+	jmp		create		; Force jump to create
+
+clear_scr1:
+	call	Clrscr		; Clear screen
+	jmp		login		; Force jump to login
+
+;--------------------Create New User-----------------------------
+create:
+	;----------------For Design----------------------
+	lea		edx , design
+	call	WriteString
+	call	crlf
+	lea		edx , design1
+	call	WriteString
+	call	crlf
+	lea		edx , design9
+	call	WriteString
+	call	crlf
+	lea		edx , design1
+	call	WriteString
+	call	crlf
+	lea		edx , design
+	call	WriteString
+	call	crlf
+	call	crlf
+	lea		edx , design8
+	call	WriteString
+	call	crlf
+	call	crlf
+
+	;---------------Display to Ask User Input Username-----------------
+	lea		edx , new_user		
+	call	WriteString			
+	
+	;---------------Read User Input Username--------------------
+	lea		edx , save_user				
+	mov		ecx , LENGTHOF save_user	
+	call 	ReadString							
+	jmp		valid_length
+
+;----------------Create new password--------------------
+create1:
+	lea		edx , new_pw		
+	call	WriteString			
+	
+	lea		edx , save_pw				 
+	mov		ecx , LENGTHOF save_pw	
+	call 	ReadString							
+	jmp		valid_length1
+
+;-----------------Confirm Password---------------------
+create2:
+	lea		edx , confirm_pw		
+	call	WriteString			
+	
+	lea		edx , temp0				
+	mov		ecx , LENGTHOF temp0	
+	call 	ReadString					 		
+	jmp		valid_length2
+
+;----------------Validation Check Length of Username------------------ 
+valid_length:
+	cmp		EAX , 5
+	je		create1
+	
+	lea		edx , invalid_length		
+	call	WriteString					
+	call	crlf
+	call	crlf	
+	jmp		menu_1
+
+;---------------Display Menu-----------------------------
+menu_1:
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu2
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu9
+	call	WriteString				
+	call	Crlf
+	lea		edx , design
+	call	WriteString							
+	call	Crlf
+	
+;-----------------------Read User Desision--------------------
+decide1:
+	call	Crlf	
+	mov		edx , OFFSET choose
+	call	WriteString	
+	mov		al , 0
+	call	ReadChar
+	call	WriteChar
+    mov		decision , al
+	call	Crlf
+	jmp		check1
+
+;-----------------------Validation Check User Desision--------------------
+check1:
+	cmp		decision , '1'
+	je		clear_scr
+
+	cmp		decision , '2'
+	je		clear_scr1
+
+	lea		edx , valid_ck
+	call	WriteString				
+	call	Crlf
+	jmp		decide1
+
+;----------------Validation Check Length of Password------------------
+valid_length1:
+	cmp		EAX , 8
+	je		create2
+	
+	lea		edx , invalid_length1		
+	call	WriteString			
+	call	crlf	
+	call	crlf
+	jmp		menu_2
+
+;---------------Display Menu-----------------------------
+menu_2:
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu2
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu3
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu10
+	call	WriteString				
+	call	Crlf
+	lea		edx , design
+	call	WriteString							
+	call	Crlf
+
+;-----------------------Read User Desision--------------------
+decide2:
+	call	Crlf
+	mov		edx , OFFSET choose2
+	call	WriteString	
+	mov		al , 0
+	call	ReadChar
+	call	WriteChar
+    mov		decision , al
+	call	Crlf
+	jmp		check2
+
+;-----------------------Validation Check User Desision--------------------
+check2:
+	cmp		decision , '1'
+	je		clear_scr
+
+	cmp		decision , '2'
+	je		clear_scr2
+
+	cmp		decision , '3'
+	je		clear_scr1
+
+	lea		edx , valid_ck2
+	call	WriteString				
+	call	Crlf
+	jmp		decide2
+
+;------------------To Clear Screen Before Force Jump-----------------------------
+clear_scr2:
+	call	Clrscr
+
+	;-----------------Design-----------------
+	lea		edx , design
+	call	WriteString
+	call	crlf
+	lea		edx , design1
+	call	WriteString
+	call	crlf
+	lea		edx , design9
+	call	WriteString
+	call	crlf
+	lea		edx , design1
+	call	WriteString
+	call	crlf
+	lea		edx , design
+	call	WriteString
+	call	crlf
+	call	crlf
+	lea		edx , design8
+	call	WriteString
+	call	crlf
+	call	crlf
+	lea		edx , new_user		
+	call	WriteString			
+	lea		edx , save_user
+	call	WriteString				
+	call	crlf
+
+	jmp		create1
+
+;----------------Validation Check Length of Password------------------
+valid_length2:
+	cmp		EAX , 8
+	je		valid_confirm2
+	
+	lea		edx , invalid_length3		
+	call	WriteString			
+	call	crlf	
+	call	crlf
+	jmp		menu_3
+
+;--------------------Validation Check--------------------
+valid_confirm2:
+	mov		ESI , 0
+	mov		AL , 0
+	mov		ecx , 8
+
+here:
+	mov		AL , save_pw[ESI]
+	cmp		AL , temp0[ESI] 
+	jne		error
+	inc		ESI
+	loop	here
+	jmp		success_create
+	
+error:
+	lea		edx , error_confirm		
+	call	WriteString			
+	call	Crlf
+	call	Crlf
+	jmp		menu_3
+
+;---------------Display Menu-----------------------------
+menu_3:
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu2
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu3
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu4
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu5
+	call	WriteString				
+	call	Crlf
+	lea		edx , design
+	call	WriteString							
+	call	Crlf
+
+;-----------------------Read User Desision--------------------
+decide3:
+	call	Crlf
+	mov		edx , OFFSET choose1
+	call	WriteString	
+	mov		al , 0
+	call	ReadChar
+	call	WriteChar
+    mov		decision , al
+	call	Crlf
+	jmp		check3
+
+;-----------------------Validation Check User Desision--------------------
+check3:
+	cmp		decision , '1'
+	je		clear_scr
+
+	cmp		decision , '2'
+	je		clear_scr2
+
+	cmp		decision , '3'
+	je		clear_scr3
+
+	cmp		decision , '4'
+	je		clear_scr1
+
+	lea		edx , valid_ck1
+	call	WriteString				
+	call	Crlf
+	jmp		decide3
+
+;------------------To Clear Screen Before Force Jump-----------------------------
+clear_scr3:
+	call Clrscr
+
+	;------------------Design----------------------
+	lea		edx , design
+	call	WriteString
+	call	crlf
+	lea		edx , design1
+	call	WriteString
+	call	crlf
+	lea		edx , design9
+	call	WriteString
+	call	crlf
+	lea		edx , design1
+	call	WriteString
+	call	crlf
+	lea		edx , design
+	call	WriteString
+	call	crlf
+	call	crlf
+	lea		edx , design8
+	call	WriteString
+	call	crlf
+	call	crlf
+	lea		edx , new_user		
+	call	WriteString			
+	lea		edx , save_user
+	call	WriteString				
+	call	crlf
+	lea		edx , new_pw		
+	call	WriteString			
+	lea		edx , save_pw
+	call	WriteString				
+	call	crlf
+
+	jmp		create2
+
+;-----------------Display if User Create Success-----------------
+success_create:
+	call	Clrscr
+	mov		dl,39					;column
+    mov		dh,2					;row
+    call	Gotoxy
+	lea		edx , user_create
+	call	WriteString				
+	call	Crlf
+	call	crlf
+	jmp		login
+
+;---------------Input User Username-------------
+login:
+
+	;-----login page design--------
+	lea		edx , design
+	call	WriteString
+	call	crlf
+	lea		edx , design1
+	call	WriteString
+	call	crlf
+	lea		edx , design10
+	call	WriteString
+	call	crlf
+	lea		edx , design1
+	call	WriteString
+	call	crlf
+	lea		edx , design
+	call	WriteString
+	call	crlf
+	call	crlf
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+	lea		edx , design3		
+	call	WriteString	
+	call	crlf
+	lea		edx , design4		
+	call	WriteString	
+	call	crlf
+	lea		edx , design5		
+	call	WriteString	
+	mov		dl,-1				;column
+    mov		dh,3				;row
+    call	Gotoxy
+	lea		edx , test_user		
+	call	WriteString	
+	lea		edx , design7		
+	call	WriteString	
+	call	crlf
+	lea		edx , design6		
+	call	WriteString	
+	mov		dl,-1				;column
+    mov		dh,4				;row
+    call	Gotoxy
+	lea		edx , test_pw		
+	call	WriteString	
+	lea		edx , design7		
+	call	WriteString	
+	call	crlf
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+	call	crlf
+	lea		edx , design8
+	call	WriteString
+	call	Crlf
+	call	crlf
+
+	;-----read user input username-------
+	lea		edx , username		
+	call	WriteString			
+	lea		edx , user				  
+	mov		ecx , LENGTHOF user	
+	call 	ReadString							
+	
+	jmp		valid_length3
+
+;----------------Validation Check Length of Password------------------
+valid_length3:
+	cmp		EAX , 5
+	je		valid_user
+	
+	lea		edx , invalid_length2		
+	call	WriteString			
+	call	crlf	
+	call	crlf
+	jmp		menu_4
+
+;----------------------User Input Username Validation Check---------------------
+valid_user:
+	mov		ESI , 0
+	mov		AL , 0
+	mov		ecx , 5
+	jmp		here2
+
+here2:	
+	mov		AL , save_user[ESI]
+	cmp		AL , user[ESI] 
+	jne		valid_confirm3
+	inc		ESI
+	loop	here2
+	jmp		login2
+
+valid_confirm3:
+	mov		ESI , 0
+	mov		AL , 0
+	mov		ecx , 5
+	jmp		here3
+
+here3:
+	mov		AL , test_user[ESI]
+	cmp		AL , user[ESI] 
+	jne		error1
+	inc		ESI
+	loop	here3
+	jmp		login2	
+
+;----------------Display if Error Occur------------------
+error1:
+	lea		edx , invalid			
+	call	WriteString	
+	call	Crlf
+	jmp		menu_4
+	
+;---------------Display Menu-----------------------------
+menu_4:	
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu6
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu7
+	call	WriteString				
+	call	Crlf
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+
+;-----------------------Read User Desision--------------------
+decide4:	
+	call	Crlf
+	mov		edx , OFFSET choose
+	call	WriteString	
+	mov		al , 0
+	call	ReadChar
+	call	WriteChar
+    mov		decision , al
+	call	Crlf
+	jmp		check4
+
+;-----------------------Validation Check User Desision--------------------
+check4:	
+	cmp		decision , '1'
+	je		clear_scr
+
+	cmp		decision , '2'
+	je		clear_scr1
+
+	lea		edx , valid_ck
+	call	WriteString				
+	call	Crlf
+	jmp		decide4
+
+;------------Input Password-----------------
+login2:
+	lea		edx , password		
+	call	WriteString			
+	
+	mov		temp1 , 0
+	lea		edx , temp1				  
+	mov		ecx , LENGTHOF temp1	
+	call 	ReadString	
+	jmp		valid_length4
+
+;----------------Validation Check Length of Password------------------
+valid_length4:
+	cmp		EAX , 8
+	je		valid_pw
+	
+	lea		edx , invalid_length3		
+	call	WriteString			
+	call	crlf	
+	call	crlf
+	jmp		menu_5
+
+;-----------------Password Validation Check----------------
+valid_pw:
+	mov		ESI , 0
+	mov		AL , 0
+	mov		ecx , 8
+	jmp		here4
+
+here4:	
+	mov		AL , save_pw[ESI]
+	cmp		AL , temp1[ESI] 
+	jne		valid_confirm4
+	inc		ESI
+	loop	here4
+	jmp		success_log
+
+valid_confirm4:
+	mov		ESI , 0
+	mov		AL , 0
+	mov		ecx , 8
+	jmp		here5
+
+here5:
+	mov		AL , test_pw[ESI]
+	cmp		AL , temp1[ESI] 
+	jne		error2
+	inc		ESI
+	loop	here5
+	jmp		success_log	
+
+;----------------Display if Error Occur------------------
+error2:
+	lea		edx , invalid1			
+	call	WriteString	
+	call	Crlf
+	jmp		menu_5
+
+;---------------Display Menu-----------------------------
+menu_5:
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu6
+	call	WriteString				
+	call	 Crlf
+	lea		edx , menu7
+	call	WriteString				
+	call	Crlf
+	lea		edx , menu8
+	call	WriteString				
+	call	Crlf
+	lea		edx , design
+	call	WriteString				
+	call	 Crlf
+
+;-----------------------Read User Desision--------------------
+decide5:	
+	call Crlf
+	mov		edx , OFFSET choose2
+	call	WriteString	
+	mov		al , 0
+	call	ReadChar
+	call	WriteChar
+    mov		decision , al
+	call	Crlf
+	jmp		check5
+
+;-----------------------Validation Check User Desision--------------------
+check5:
+	cmp		decision , '1'
+	je		clear_scr
+
+	cmp		decision , '2'
+	je		clear_scr1
+
+	cmp		decision , '3'
+	je		clear_scr4
+
+	lea		edx , valid_ck2
+	call	WriteString				
+	call	Crlf
+	jmp		decide5	
+
+;------------------To Clear Screen Before Force Jump-----------------------------
+clear_scr4:
+	call	Clrscr
+
+	;-----login page design--------
+	lea		edx , design
+	call	WriteString
+	call	crlf
+	lea		edx , design1
+	call	WriteString
+	call	crlf
+	lea		edx , design10
+	call	WriteString
+	call	crlf
+	lea		edx , design1
+	call	WriteString
+	call	crlf
+	lea		edx , design
+	call	WriteString
+	call	crlf
+	call	crlf
+	lea		edx , design
+	call	WriteString				
+	call	Crlf
+	lea		edx , design3		
+	call	WriteString	
+	call	crlf
+	lea		edx , design4		
+	call	WriteString	
+	call	crlf
+	lea		edx , design5		
+	call	WriteString	
+	mov		dl,-1				;column
+    mov		dh,3				;row
+    call	Gotoxy
+	lea		edx , test_user		
+	call	WriteString	
+	lea		edx , design7		
+	call	WriteString	
+	call	crlf
+	lea		edx , design6		
+	call	WriteString	
+	mov		dl,-1				;column
+    mov		dh,4				;row
+    call	Gotoxy
+	lea		edx , test_pw		
+	call	WriteString	
+	lea		edx , design7		
+	call	WriteString	
+	call	crlf
+	lea		edx , design
+	call	WriteString			
+	call	Crlf
+	call	crlf
+	lea		edx , design8
+	call	WriteString
+	call	Crlf
+	call	crlf
+	lea		edx , username		
+	call	WriteString			
+	lea		edx , user			
+	call	WriteString			
+	call	crlf
+
+	jmp		login2
+
+;------------------Display if Login Success----------------
+success_log:
+	call	Clrscr
+
+	call	crlf
+	lea		edx , design8
+	call	WriteString
+	call	Crlf
+	call	crlf
+	mov		dl,52					;column
+    mov		dh,4					;row
+    call	Gotoxy
+	lea		edx , log_success
+	call	WriteString				
+	call	Crlf
+	call	crlf
+	call	crlf
+	lea		edx , design8
+	call	WriteString
+	call	crlf
 
 ; |_____________________ Chuan Yan _____________________|   | Proc
 
@@ -735,6 +1536,8 @@ checkOut:
 proceed_CheckOut:
     
 ; |^^^^^^^^^^^^^^^^^^^^^ Ler Shean ^^^^^^^^^^^^^^^^^^^^^|   | Data
+    lea edx,orderList
+    mov eax,0;
 
 ; |_____________________ Ler Shean _____________________|   | Data
 
