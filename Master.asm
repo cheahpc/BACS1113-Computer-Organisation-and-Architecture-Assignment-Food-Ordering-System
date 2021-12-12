@@ -11,28 +11,29 @@ INCLUDE macros.inc
 ; ================================================================ VARIABLES
 .data
 ; |^^^^^^^^^^^^^^^^^^^^^ Chuan Yan ^^^^^^^^^^^^^^^^^^^^^|   | Data
-    design          byte    "                   //////////////////////////////////////////" , 0
-    design1         byte    "                   //                                      //" , 0
-    design2         byte    "                   //      Signup / Login                  //" , 0
-    design3         byte    "                   //      Sample User                     //" , 0
-    design4         byte    "                   //      -----------                     //" , 0
-    design5         byte    "                   //      Username: " , 0
-    design6         byte    "                   //      Password: " , 0
-    design7         byte    "       //" , 0
+    design          byte    "                                       //////////////////////////////////////////" , 0
+    design1         byte    "                                       //                                      //" , 0
+    design2         byte    "                                       //            Signup / Login            //" , 0
+    design3         byte    "                                       //            Guest Login               //" , 0
+    design4         byte    "                                       //            -----------               //" , 0
+    design5         byte    "                                       //            Username: " , 0
+    design6         byte    "                                       //            Password: " , 0
+    design7         byte    "           //" , 0
     design8         byte    "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////" , 0
-    design9         byte    "                   //      Sign Up Page                    //" , 0
-    design10        byte    "                   //      Login Page                      //" , 0
-    menu            byte    "                   //      1. Create User                  //" , 0
-    menu1           byte    "                   //      2. Login                        //" , 0
-    menu2           byte    "                   //  1. Move to New Username.            //" , 0
-    menu3           byte    "                   //  2. Move to New Password.            //" , 0
-    menu4           byte    "                   //  3. Move to Confirm Password.        //" , 0
-    menu5           byte    "                   //  4. Move to Login.                   //" , 0
-    menu6           byte    "                   //  1. Move to Create User.             //" , 0
-    menu7           byte    "                   //  2. Move to Username.                //" , 0
-    menu8           byte    "                   //  3. Move to Password.                //" , 0
-    menu9           byte    "                   //  2. Move to Login.                   //" , 0
-    menu10          byte    "                   //  3. Move to Login.                   //" , 0
+    design9         byte    "                                       //             Sign Up Page             //" , 0
+    design10        byte    "                                       //             Login Page               //" , 0
+    design11         byte    "        //" , 0
+    menu            byte    "                                       //            1. Create User            //" , 0
+    menu1           byte    "                                       //            2. Login                  //" , 0
+    menu2           byte    "                                       //      1. Move to New Username.        //" , 0
+    menu3           byte    "                                       //      2. Move to New Password.        //" , 0
+    menu4           byte    "                                       //      3. Move to Confirm Password.    //" , 0
+    menu5           byte    "                                       //      4. Move to Login.               //" , 0
+    menu6           byte    "                                       //      1. Move to Create User.         //" , 0
+    menu7           byte    "                                       //      2. Move to Username.            //" , 0
+    menu8           byte    "                                       //      3. Move to Password.            //" , 0
+    menu9           byte    "                                       //      2. Move to Login.               //" , 0
+    menu10          byte    "                                       //      3. Move to Login.               //" , 0
 
     choose          byte    "Please enter 1 or 2: " , 0
     choose1         byte    "Please enter 1, 2, 3 or 4: " , 0
@@ -58,8 +59,8 @@ INCLUDE macros.inc
     log_success     byte    "Iogin success." , 0
 
     decision        byte    ?
-    test_user       byte    "test0" , 0
-    test_pw         byte    "abc12345" , 0
+    test_user       byte    "Guest" , 0
+    test_pw         byte    "88888888" , 0
     save_user       byte    6 DUP(?) , 0
     save_pw         byte    9 DUP(?) , 0
     temp0           byte    9 DUP(?) , 0
@@ -85,15 +86,70 @@ INCLUDE macros.inc
 ; |_____________________ Pin Chee _____________________|    | Data
 
 ; |^^^^^^^^^^^^^^^^^^^^^ Ler Shean ^^^^^^^^^^^^^^^^^^^^^|   | Data
+    a1h_cost byte 14
+    a2h_cost byte 19
+    a3h_cost byte 33
+    b1h_cost byte 10
+    b2h_cost byte 7
+    b3h_cost byte 5
+    c1h_cost byte 3
+    c2h_cost byte 5
+    c3h_cost byte 4
+    record_total_cost word 0
+    record_sub_total_cost word 0
+    orderNumber dword 1
+    orderListList_Count dword -1
+    a1h byte 'Soloman -Drum Delux*1 -Fries (Large)*1 -Soda(400ml)*1', 0
+    a2h byte 'Dual Fun -Fish n Chips*2 -Salted Fish Skin 3oz*2 -Tafan (800ml)*2', 0
+    a3h byte 'Family Bis! -Roti Kampung*4 - Hamshroom*2 - Spute (800ml)*2', 0
+    b1h byte 'Drum Delux', 0
+    b2h byte 'Fish n Chips', 0
+    b3h byte 'Roti Kamung', 0
+    c1h byte 'Soda', 0
+    c2h byte 'Tafan', 0
+    c3h byte 'Sprute', 0
 
+    design_line byte 126 dup('#'), 0
+    summary byte '                                          SUMMARY OF THE ORDER LIST', 0
+    order_no byte 'Order Number', 0
+    food_id byte 'Food ID', 0
+    food_name byte 'Food Name', 0
+    cost byte 'Cost (RM)', 0
+    qty byte 'Quantity', 0
+    total_cost byte 'Total Cost(RM)', 0
+    line_1 byte 126 dup('-'), 0
+    line_2 byte 126 dup('='), 0
+    dh_value byte 11, 0
+        
+    cost_desc byte ' The total cost for the order is ', 0
+    cost_summary byte ?
+    ask_input byte '-', 0
+    cust_name byte ' CUSTOMER NAME', 0
+    line_6 byte '****************', 0
+    address1 byte ' ADDRESS', 0
+    line_3 byte '**********', 0
+    address2 byte ' 2, Lebuh Carnarvon, George Town, 10100 George Town, Pulau Pinang', 0
+    contact_no1 byte ' CONTACT NUMBER', 0
+    line_4 byte '****************', 0
+    contact_no2 byte ' If you have any suggestions or feedback, please contact the phone number below: ', 0
+    contact_no3 byte ' Restaurant Number: 04-5782 4322', 0
+    contact_no4 byte ' Mr. Tan: 012-345 6789', 0
+    contact_no5 byte ' Ms. Goh: 017-986 5432', 0
+    direction byte ' DIRECTION', 0
+    line_5 byte '***********', 0
+    forward byte ' 1. Enter 1 for switch to Payment Interface.', 0
+    backward byte ' 2. Enter 2 for back to Menu.', 0
+    ask_direction_input byte ' Enter a direction: ', 0
+    store_direction_user byte ?
+    goto_invalid byte ' Invalid, please enter again!!!:', 0
 ; |_____________________ Ler Shean _____________________|   | Data
 
 ; |^^^^^^^^^^^^^^^^^^^^^ Chun Shen ^^^^^^^^^^^^^^^^^^^^^|   | Data
 ;   -----------Total---------
 
-    totalPay        DWORD   50      ;------------------------------------------------------------ Ler Shean
-    totalAmount     DWORD   ?
-    balance         DWORD   ?
+    totalAmount             WORD   0
+    coin                    BYTE   ".00" , 0
+    balance                 WORD   ?
 
 ;   -----------Option--------
 
@@ -103,24 +159,24 @@ INCLUDE macros.inc
 
 ;   -----------Cost----------
 
-    discountCost    DWORD   ?
-    deliveryCost    DWORD   ?
+    discountCost    WORD   ?
+    deliveryCost    WORD   ?
 
 ;   -----------Qty-----------
 
-    qtyRM100        DWORD   ?
-    qtyRM50         DWORD   ?
-    qtyRM10         DWORD   ?
-    qtyRM5          DWORD   ?
-    qtyRM1          DWORD   ?
+    qtyRM100        BYTE   ?
+    qtyRM50         BYTE   ?
+    qtyRM10         BYTE   ?
+    qtyRM5          BYTE   ?
+    qtyRM1          BYTE   ?
 
 ;   -----------Amount--------
 
-    amountRM100     DWORD   ?
-    amountRM50      DWORD   ?
-    amountRM10      DWORD   ?
-    amountRM5       DWORD   ?
-    amountRM1       DWORD   ?
+    amountRM100     WORD   ?
+    amountRM50      WORD   ?
+    amountRM10      WORD   ?
+    amountRM5       WORD   ?
+    amountRM1       WORD   ?
 
 ;   -----------Info----------
 
@@ -146,20 +202,20 @@ INCLUDE macros.inc
     fullMAYB        BYTE    "MAY Bank" , 0
     fullAMB         BYTE    "AM Bank" , 0
 
-;   -----------Repeat--------
+;-----------Repeat--------
 
     displayTitle    BYTE    0
     invalidData     BYTE    0
     request         BYTE    0
 
-;   --------------------------------Title----------------------------------------
+;--------------------------------Title----------------------------------------
 
     titleSys        BYTE    "///                        Transaction of Food Ordering System                           ///" , 0
     titleBank       BYTE    "///                     Select Your Bank Name To Make The Payment                        ///" , 0
     titleCash       BYTE    "///                     Select Your Cash Digit To Do Your Payment                        ///" , 0
     titleRcpt       BYTE    "///                                 PAYMENT RECEIPT                                      ///" , 0
 
-;   --------------------------------Output line----------------------------------
+;-------------------------------Output line----------------------------------
 
     line1           BYTE    "////////////////////////////////////////////////////////////////////////////////////////////" , 0
     line2           BYTE    "///                                                                                      ///" , 0
@@ -168,7 +224,7 @@ INCLUDE macros.inc
     line5           BYTE    "///                                          ============================                ///" , 0
     line6           BYTE    "///                                    ------------>> RM " , 0
 
-;   --------------------------------Prompt---------------------------------------
+;--------------------------------Prompt---------------------------------------
 
     promptOpt       BYTE    "///                               Enter Your Option : " , 0
     promptBank      BYTE    "///                  Name of the Bank    (e.g. HLB) : " , 0
@@ -179,24 +235,24 @@ INCLUDE macros.inc
     promptDlvr      BYTE    "///         Delivery press (1) || Pick Up press (Any Key) (Delivery Fee RM 1.00)         ///" , 0
     promptCont      BYTE    "///           CONTINUE press any key || RESET press (R) || BACK press (B)                ///" , 0
 
-;   --------------------------------Output---------------------------------------
+;--------------------------------Output---------------------------------------
 
     outputInvalid   BYTE    "///                          Invalid Data Please Try Again!!!                            ///" , 0
     outputHP        BYTE    "///             HONG LEONG BANK   -   HLB    ||   PUBLIC BANK   -   PBB" , 0
     outputRC        BYTE    "///             RHB BANK          -   RHB    ||   CIMB BANK     -   CIMB" , 0
     outputMA        BYTE    "///             MAY BANK          -   MAYB   ||   AM BANK       -   AMB" , 0
-    outputDis       BYTE    "///            Discount Fee             (RM) :         RM " , 0
-    outputDlvr      BYTE    "///            Delivery Fee             (RM) :         RM " , 0
-    outputTotPay    BYTE    "///            Total Payment            (RM) :         RM " , 0
+    outputDis       BYTE    "///            (-) Discount Fee         (RM) :        RM " , 0
+    outputDlvr      BYTE    "///            (+) Delivery Fee         (RM) :        RM " , 0
+    outputTotPay    BYTE    "///            Total Payment            (RM) :        RM " , 0
     outputRM100     BYTE    "///            RM 100.00    x      " , 0
     outputRM50      BYTE    "///            RM 50.00     x      " , 0
     outputRM10      BYTE    "///            RM 10.00     x      " , 0
     outputRM5       BYTE    "///            RM 5.00      x      " , 0
     outputRM1       BYTE    "///            RM 1.00      x      " , 0
-    outputTotAmt    BYTE    "///            Total Amount             (RM) :         RM " , 0
-    outputBalance   BYTE    "///            Balance Amount           (RM) :         RM " , 0
-    outputUnsuccess BYTE    "///                      Transaction Unsuccessfull Please Try Again!!!                   ///" , 0
-    outputSuccess   BYTE    "///                              Transaction Successfull !!!                             ///" , 0
+    outputTotAmt    BYTE    "///            Total Amount             (RM) :        RM " , 0
+    outputBalance   BYTE    "///            Balance Amount           (RM) :        RM " , 0
+    outputUnsuccess BYTE    "///                      Transaction Unsuccessful Please Try Again!!!                    ///" , 0
+    outputSuccess   BYTE    "///                              Transaction Successful !!!                              ///" , 0
     outputDateTime  BYTE    "///                   Transaction Date/Time     : 13 Dec 2021 11:59:59 PM" , 0
     outputName      BYTE    "///                   Recipient's Reference     : " , 0
     outputRefNo     BYTE    "///                   Reference Number          : " , 0
@@ -492,17 +548,17 @@ c_Menu0:
 c_Menu1:
     mWriteLn    "                       Value Meal"
     mWriteLn    "------------------------------------------------------------"
-    mWriteLn    ">>      1. Soloman                                 RM  14.50"
+    mWriteLn    ">>      1. Soloman                                 RM  14.00"
     mWriteLn    ">>         - Drum Delux                x1"
     mWriteLn    ">>         - Fries (Large)             x1"
     mWriteLn    ">>         - Soda (400ml)              x1"
     mWriteLn    ">>"
-    mWriteLn    ">>      2. Dual Fun                                RM  18.90"
+    mWriteLn    ">>      2. Dual Fun                                RM  19.00"
     mWriteLn    ">>         - Fish n Chips              x2"
     mWriteLn    ">>         - Salted Fish Skin 3oz      x2"
     mWriteLn    ">>         - Tafan (800ml)             x2"
     mWriteLn    ">>"
-    mWriteLn    ">>      3. Family Bis!                             RM  32.70"
+    mWriteLn    ">>      3. Family Bis!                             RM  33.00"
     mWriteLn    ">>         - Roti Kamung               x4"
     mWriteLn    ">>         - HamShroom                 x2"
     mWriteLn    ">>         - Sprute (800ml)            x2"
@@ -514,11 +570,11 @@ c_Menu1:
 c_Menu2:
     mWriteLn    "                       Ala Carte"
     mWriteLn    "------------------------------------------------------------"
-    mWriteLn    ">>      1. Drum Delux                              RM   9.50"
+    mWriteLn    ">>      1. Drum Delux                              RM  10.00"
     mWriteLn    ">>"
-    mWriteLn    ">>      2. Fish n Chips                            RM   6.80"
+    mWriteLn    ">>      2. Fish n Chips                            RM   7.00"
     mWriteLn    ">>"
-    mWriteLn    ">>      3. Roti Kamung                             RM   5.30"
+    mWriteLn    ">>      3. Roti Kamung                             RM   5.00"
     mWriteLn    ">>"
     mWriteLn    ">>      A. Back"
     mWriteLn    ">>      B. Next Page (*Under Maintenance)"
@@ -527,11 +583,11 @@ c_Menu2:
 c_Menu3:
     mWriteLn    "                         Drink"
     mWriteLn    "------------------------------------------------------------"
-    mWriteLn    ">>      1. Soda                                    RM   3.50"
+    mWriteLn    ">>      1. Soda                                    RM   3.050"
     mWriteLn    ">>"
-    mWriteLn    ">>      2. Tafan                                   RM   4.80"
+    mWriteLn    ">>      2. Tafan                                   RM   5.00"
     mWriteLn    ">>"
-    mWriteLn    ">>      3. Sprute                                  RM   3.80"
+    mWriteLn    ">>      3. Sprute                                  RM   4.00"
     mWriteLn    ">>"
     mWriteLn    ">>      A. Back"
     mWriteLn    ">>      B. Next Page (*Under Maintenance)"
@@ -545,7 +601,7 @@ main proc
 
 ; |^^^^^^^^^^^^^^^^^^^^^ Chuan Yan ^^^^^^^^^^^^^^^^^^^^^|   | Proc
 ;---------------Display Title-----------------------
-title:
+designTitle:
     ; mWriteString design
     lea     edx , design
     call    WriteString
@@ -936,14 +992,24 @@ clear_scr3:
 
 ;-----------------Display if User Create Success-----------------
 success_create:
-    call    Clrscr
+     call    Clrscr
+    call    crlf
+    lea     edx , design8
+    call    WriteString
+    call    crlf
+    call    crlf
     mov     dl,39                   ;column
-    mov     dh,2                    ;row
+    mov     dh,4                    ;row
     call    Gotoxy
     lea     edx , user_create
     call    WriteString
     call    Crlf
     call    crlf
+    call    crlf
+    lea     edx , design8
+    call    WriteString
+    call    waitmsg
+    call    clrscr
     jmp     login
 
 ;---------------Input User Username-------------
@@ -992,7 +1058,7 @@ login:
     call    Gotoxy
     lea     edx , test_pw
     call    WriteString
-    lea     edx , design7
+    lea     edx , design11
     call    WriteString
     call    crlf
     lea     edx , design
@@ -1251,7 +1317,7 @@ clear_scr4:
     call    Gotoxy
     lea     edx , test_pw
     call    WriteString
-    lea     edx , design7
+    lea     edx , design11
     call    WriteString
     call    crlf
     lea     edx , design
@@ -1290,6 +1356,7 @@ success_log:
     lea     edx , design8
     call    WriteString
     call    crlf
+    call    waitmsg
 
 ; |_____________________ Chuan Yan _____________________|   | Proc
 
@@ -1303,6 +1370,10 @@ resetVar:
     mov orderList_Counter, 0
     mov orderList, 0
     mov dummy, 0
+    mov orderNumber, 1
+    mov orderListList_Count, -1
+    mov dh_value, 11
+    
 LM:
     mov MenuCounter, '0'
     INVOKE printMenu, MenuCounter                             ; Print Initial Menu
@@ -1658,13 +1729,691 @@ checkOut:
 
 proceed_CheckOut:
 
-; |^^^^^^^^^^^^^^^^^^^^^ Ler Shean ^^^^^^^^^^^^^^^^^^^^^|   | Data
-    lea edx,orderList
-    mov eax,0;
+; |^^^^^^^^^^^^^^^^^^^^^ Ler Shean ^^^^^^^^^^^^^^^^^^^^^|   | Proc
+    call clrscr
 
-; |_____________________ Ler Shean _____________________|   | Data
+    call crlf                           ;leave a blank row
 
-; |^^^^^^^^^^^^^^^^^^^^^ Chun Shen ^^^^^^^^^^^^^^^^^^^^^|   | Data
+    mov edx, offset design_line         ;
+    call writestring                    ;call the function to output the 'design_line'
+    call crlf                           ;leave a blank row
+    call crlf                           ;leave a blank row
+    call crlf                           ;leave a blank row
+
+    ; mov dl, 63                          ;set columns
+    ; mov dh, 4                           ;set rows
+    ; call gotoxy                         ;call the function to adjust the rows and columns
+
+    lea edx, summary                    ;
+    call writestring                    ;call the function to output the 'summary'
+
+    call crlf                           ;leave a blank row
+    call crlf                           ;leave a blank row
+    call crlf                           ;leave a blank row
+
+    mov edx, offset design_line             ;
+    call writestring                    ;write the function to output the 'design_line'
+
+    call crlf                           ;leave a blank row
+    call crlf                           ;leave a blank row
+
+    mov dl, 1                           ;set columns
+    mov dh, 9                           ;set rows
+    call gotoxy                         ;call the function to adjust the rows and columns
+
+    mov edx, offset order_no
+    call writestring                    ;write the function to output the 'order_no'
+
+    mov dl, 16                          ;set columns
+    mov dh, 9                           ;set rows
+    call gotoxy                         ;call the function to adjust the rows and columns
+
+    mov edx, offset food_name
+    call writestring                    ;write the function to output the 'food_name'
+
+    mov dl, 85                          ;set columns
+    mov dh, 9                           ;set rows
+    call gotoxy                         ;call the function to adjust the rows and columns
+
+    mov edx, offset cost
+    call writestring                    ;write the function to output the 'cost'
+
+    mov dl, 100                         ;set columns
+    mov dh, 9                           ;set rows
+    call gotoxy                         ;call the function to adjust the rows and columns
+
+    mov edx, offset qty
+    call writestring                    ;write the function to output the 'qty'
+
+    mov dl, 112                         ;set columns
+    mov dh, 9                           ;set rows
+    call gotoxy                         ;call the function to adjust the rows and columns
+
+    mov edx, offset total_cost          
+    call writestring                    ;write the function to output the 'total_cost'
+    call crlf                           ;jump to next row
+
+    mov edx, offset line_1
+    call writestring
+    call crlf
+    call crlf
+
+;store user input
+store:
+    mov orderNumber,1
+    xor ecx,ecx
+    mov cl, orderList_Counter
+    lea edx, orderListList_Count
+loop1:
+    inc orderListList_Count
+    mov esi, orderListList_Count
+    cmp byte ptr orderList[esi], 0a1h
+    je a1
+    cmp byte ptr orderList[esi], 0a2h
+    je a2
+    cmp byte ptr orderList[esi], 0a3h
+    je a3
+    cmp byte ptr orderList[esi], 0b1h
+    je b1
+    cmp byte ptr orderList[esi], 0b2h
+    je b2
+    cmp byte ptr orderList[esi], 0b3h
+    je b3
+    cmp byte ptr orderList[esi], 0c1h
+    je c1
+    cmp byte ptr orderList[esi], 0c2h
+    je c2
+    cmp byte ptr orderList[esi], 0c3h
+    je c3
+
+    jmp flw
+        
+a1:
+    mov dl, 1
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, orderNumber
+    call writedec
+
+    mov dl, 16
+    mov dh, dh_value
+    call gotoxy
+
+    mov edx, offset a1h
+    call writestring
+    call crlf
+
+    mov dl, 85
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, 0
+    mov al, a1h_cost
+    call writedec
+    call crlf
+
+    mov dl, 100
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    call writedec
+    call crlf
+
+    mov dl, 112
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    mul a1h_cost
+    mov record_total_cost, ax
+    ; mov ax, record_total_cost
+    call writedec
+    call crlf
+
+    mov dh, dh_value
+    inc dh
+    mov dh_value, dh
+
+    jmp subtotal
+
+a2:
+    mov dl, 1
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, orderNumber
+    call writedec
+
+    mov dl, 16
+    mov dh, dh_value
+    call gotoxy
+
+    mov edx, offset a2h
+    call writestring
+    call crlf
+
+    mov dl, 85
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, 0
+    mov al, a2h_cost
+    call writedec
+    call crlf
+
+    mov dl, 100
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    call writedec
+    call crlf
+
+    mov dl, 112
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    mul a2h_cost
+    mov record_total_cost, ax
+    ; mov ax, record_total_cost
+    call writedec
+    call crlf
+
+    mov dh, dh_value
+    inc dh
+    mov dh_value, dh
+
+    jmp subtotal
+
+a3:
+    mov dl, 1
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, orderNumber
+    call writedec
+
+    mov dl, 16
+    mov dh, dh_value
+    call gotoxy
+
+    mov edx, offset a3h
+    call writestring
+    call crlf
+
+    mov dl, 85
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, 0
+    mov al, a3h_cost
+    call writedec
+    call crlf
+
+    mov dl, 100
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    call writedec
+    call crlf
+
+    mov dl, 112
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    mul a3h_cost
+    mov record_total_cost, ax
+    ; mov ax, record_total_cost
+    call writedec
+    call crlf
+
+    mov dh, dh_value
+    inc dh
+    mov dh_value, dh
+
+    jmp subtotal
+
+b1:
+    mov dl, 1
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, orderNumber
+    call writedec
+
+    mov dl, 16
+    mov dh, dh_value
+    call gotoxy
+
+    mov edx, offset b1h
+    call writestring
+    call crlf
+
+    mov dl, 85
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, 0
+    mov al, b1h_cost
+    call writedec
+    call crlf
+
+    mov dl, 100
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    call writedec
+    call crlf
+
+    mov dl, 112
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    mul b1h_cost
+    mov record_total_cost, ax
+    ; mov ax, record_total_cost
+    call writedec
+    call crlf
+
+    mov dh, dh_value
+    inc dh
+    mov dh_value, dh
+
+    jmp subtotal
+
+b2:
+    mov dl, 1
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, orderNumber    
+    call writedec
+
+    mov dl, 16
+    mov dh, dh_value
+    call gotoxy
+
+    mov edx, offset b2h
+    call writestring
+    call crlf
+
+    mov dl, 85
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, 0
+    mov al, b2h_cost
+    call writedec
+    call crlf
+
+    mov dl, 100
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    call writedec
+    call crlf
+
+    mov dl, 112
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    mul b2h_cost
+    mov record_total_cost, ax
+    ; mov ax, record_total_cost
+    call writedec
+    call crlf
+
+    mov dh, dh_value
+    inc dh
+    mov dh_value, dh
+
+    jmp subtotal
+
+b3:
+    mov dl, 1
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, orderNumber    
+    call writedec
+
+    mov dl, 16
+    mov dh, dh_value
+    call gotoxy
+
+    mov edx, offset b3h
+    call writestring
+    call crlf
+
+    mov dl, 85
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, 0
+    mov al, b3h_cost
+    call writedec
+    call crlf
+
+    mov dl, 100
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    call writedec
+    call crlf
+
+    mov dl, 112
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    mul b3h_cost
+    mov record_total_cost, ax
+    ; mov ax, record_total_cost
+    call writedec
+    call crlf
+
+    mov dh, dh_value
+    inc dh
+    mov dh_value, dh
+
+    jmp subtotal
+
+c1:
+    mov dl, 1
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, orderNumber    
+    call writedec
+
+    mov dl, 16
+    mov dh, dh_value
+    call gotoxy
+
+    mov edx, offset c1h
+    call writestring
+    call crlf
+
+    mov dl, 85
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, 0
+    mov al, c1h_cost
+    call writedec
+    call crlf
+
+    mov dl, 100
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    call writedec
+    call crlf
+
+    mov dl, 112
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    mul c1h_cost
+    mov record_total_cost, ax
+    ; mov ax, record_total_cost
+    call writedec
+    call crlf
+
+    mov dh, dh_value
+    inc dh
+    mov dh_value, dh
+
+    jmp subtotal
+
+c2:
+    mov dl, 1
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, orderNumber    
+    call writedec
+
+    mov dl, 16
+    mov dh, dh_value
+    call gotoxy
+
+    mov edx, offset c2h
+    call writestring
+    call crlf
+
+    mov dl, 85
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, 0
+    mov al, c2h_cost
+    call writedec
+    call crlf
+
+    mov dl, 100
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    call writedec
+    call crlf
+
+    mov dl, 112
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    mul c2h_cost
+    mov record_total_cost, ax
+    ; mov ax, record_total_cost
+    call writedec
+    call crlf
+
+    mov dh, dh_value
+    inc dh
+    mov dh_value, dh
+
+    jmp subtotal
+
+c3:
+    mov dl, 1
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, orderNumber    
+    call writedec
+
+    mov dl, 16
+    mov dh, dh_value
+    call gotoxy
+
+    mov edx, offset c3h
+    call writestring
+    call crlf
+
+    mov dl, 85
+    mov dh, dh_value
+    call gotoxy
+
+    mov eax, 0
+    mov al, c3h_cost
+    call writedec
+    call crlf
+
+    mov dl, 100
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    call writedec
+    call crlf
+
+    mov dl, 112
+    mov dh, dh_value
+    call gotoxy
+
+    mov al, byte ptr orderList[esi+1]
+    mul c3h_cost
+    mov record_total_cost, ax
+    ; mov ax, record_total_cost
+    call writedec
+    call crlf
+
+    mov dh, dh_value
+    inc dh
+    mov dh_value, dh
+
+    jmp subtotal
+
+subtotal:
+    inc orderNumber
+    inc orderListList_Count
+    mov ax, record_sub_total_cost
+    add ax, record_total_cost
+    mov record_sub_total_cost, ax
+    dec cl
+    cmp cl, 0
+    jne loop1
+
+flw:
+    mov edx, offset line_1                          ;move the 'line1' address to edx
+    call writestring                                ;call the function to display 'line1'
+    call crlf
+
+    mov edx, offset cost_desc                       ;move the 'cost_desc' address to edx
+    call writestring                                ;call the function to display 'cost_desc'
+
+    mov ax, record_sub_total_cost
+    call writedec
+    call crlf
+
+    mov edx, offset line_2                          ;move the 'line_2' address to edx
+    call writestring                                ;call the function to display 'line_2'
+    call crlf                                       ;jump to next row
+    call crlf                                       ;leave a blank row
+
+    mov edx, offset cust_name                       ;move the 'cust_name' address to edx
+    call writestring                                ;call the function to display 'cust_name'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset line_6                          ;move the 'line_6' address to edx
+    call writestring                                ;call the function to display 'line_6'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset user                            ;move the 'store_cust_name' address to edx
+    call writestring                                ;call the function to display 'store_cust_name'
+    call crlf                                       ;jump to next row
+    call crlf                                       ;leave a blank row
+
+    mov edx, offset address1                        ;move the 'address1' address to edx
+    call writestring                                ;call the function to display 'address1'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset line_3                          ;move the 'line_3' address to edx
+    call writestring                                ;call the function to display 'line_3'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset address2                        ;move the 'address2' address to edx
+    call writestring                                ;call the function to display 'address2'
+    call crlf                                       ;jump to next row
+    call crlf                                       ;leave a blank row
+
+    mov edx, offset contact_no1                     ;move the 'contact_no1' address to edx
+    call writestring                                ;call the function to display 'contact_no1'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset line_4                          ;move the 'line_4' address to edx
+    call writestring                                ;call the function to display 'line_4'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset contact_no2                     ;move the 'contact_no2' address to edx
+    call writestring                                ;call the function to display 'contact_no2'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset contact_no3                     ;move the 'contact_no3' address to edx
+    call writestring                                ;call the function to display 'contact_no3'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset contact_no4                     ;move the 'contact_no4' address to edx
+    call writestring                                ;call the function to display 'contact_no4'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset contact_no5                     ;move the 'contact_no5' address to edx
+    call writestring                                ;call the function to display 'contact_no5'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset design_line                     ;move the 'design_line' address to edx
+    call writestring                                ;call the function to display 'design_line'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset direction                       ;move the 'direction' address to edx
+    call writestring                                ;call the function to display 'direction'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset line_5                          ;move the 'line_5' address to edx
+    call writestring                                ;call the function to display 'line_5'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset forward                         ;move the 'foward' address to edx
+    call writestring                                ;call the function to display 'foward'
+    call crlf                                       ;jump to next row
+
+    mov edx, offset backward                        ;move the 'backward' address to edx
+    call writestring                                ;call the function to display 'backward'
+    call crlf                                       ;jump to next row
+    call crlf                                       ;leave a blank row
+
+    mov edx, offset ask_direction_input             ;move the 'ask_direction_input' address to edx
+    call writestring                                ;call the function to display 'ask_direction_input'
+        
+input:
+    mov eax, offset store_direction_user            ;move the 'store_direction_user' address to eax
+    call readint                                    ; call the function to read user input
+
+again:
+    cmp eax, 1                                      ;compare eax and 1
+    je sysMenu                                      ;jump to 'transaction' if eax equal 1
+    jmp here_6                                      ;else jump to 'here_6'
+
+here_6:
+    push eax
+    lea edx, orderList_Counter
+    lea eax, orderNumber
+    lea ecx, orderList
+    pop eax
+    cmp eax, 2                                      ;compare eax and 2
+    je resetVar                                         ;jump to 'resetVar' if eax equal 2
+    jmp invalid_10                                     ;else jump to 'invalid_10'
+
+invalid_10:
+    call crlf                                       ;leave a blank row
+    mov edx, offset goto_invalid                    ;move the 'goto_invalid' address to edx
+    call writestring                                ;call the function to display 'goto_invalid'
+    jmp input                                       ;jump to 'input'
+
+    mov edx, offset design_line                         ;move the 'design_line' address to edx
+    call writestring                                ;call the function to display 'design_line'
+    call crlf                                       ;leave a blank row
+
+    call waitmsg                                    ;press any key to continue
+
+; |_____________________ Ler Shean _____________________|   | Proc
+
+; |^^^^^^^^^^^^^^^^^^^^^ Chun Shen ^^^^^^^^^^^^^^^^^^^^^|   | Proc
+
 ;---------------------------------------------TITLE----------------------------------------------
 
 sysMenu:
@@ -1871,7 +2620,6 @@ inputCont:
     CALL    Crlf                            ; go new line
     CALL    Crlf                            ; go new line
 
-
     CALL    ReadChar                        ; read the user input the option continue or reset or back
     MOV     optCont , AL
 
@@ -1910,7 +2658,7 @@ back1:
     MOV     AL , 2                          ; else move 2 value to AL to reset the value for select cash digit
     CMP     request , AL                    ; compare request to AL
     JE      inputMenu                       ; jump to inputMenu if request is equal to AL
-    JMP     inputMenu                       ; else jump to the sysMenu -------------------------------------------------(LerShean)
+    JMP     resetVar                        ; else jump to the resetVar = Menu------------------------------------------(Pin Chee)
 
 ;------------------------------PROMPT THE USER ENTER CARD ACCOUNT NUMBER-------------------------
 
@@ -2111,8 +2859,11 @@ displayDis:
     MOV     EDX , OFFSET outputDis          ; LEA EDX , outputDis
     CALL    WriteString                     ; display output discount fee
 
-    MOV     EAX , discountCost              ; move discountCost value into EAX
+    MOV     AX , discountCost               ; move discountCost value into AX
     CALL    WriteDec                        ; display discountCost
+
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf                            ; go new line
 
 ;------------------------------Display Delivery Fee----------------------------------------------
@@ -2124,19 +2875,22 @@ displayDis:
     MOV     EDX , OFFSET outputDlvr         ; LEA EDX , outputDlvr
     CALL    WriteString                     ; display output delivery fee
 
-    MOV     EAX , deliveryCost              ; move deliveryCost value into EAX
+    MOV     AX , deliveryCost               ; move deliveryCost value into AX
     CALL    WriteDec                        ; display deliveryCost
+
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf                            ; go new line
 
 ;----------------------------------CALCULATE ADD TOTAL WITH DELIVERY FEE-------------------------
 
-    MOV     EAX , deliveryCost              ; move delivery value into EAX
-    ADD     totalPay , EAX                  ; add total with delivery fee
+    MOV     AX , deliveryCost               ; move delivery value into AX
+    ADD     record_sub_total_cost , AX      ; add record_sub_total_cost with delivery fee
 
 ;---------------------------------CALCULATE SUB TOTAL WITH DISCOUNT------------------------------
 
-    MOV     EAX , discountCost              ; move discount value into AL
-    SUB     totalPay , EAX                  ; minus price with discount
+    MOV     AX , discountCost              ; move discount value into AX
+    SUB     record_sub_total_cost , AX     ; minus record_sub_total_cost with discount
 
 ;----------------------------------DISPLAY TOTAL PAYMENT-----------------------------------------
 
@@ -2147,8 +2901,11 @@ displayDis:
     MOV     EDX , OFFSET outputTotPay       ; LEA EDX , outputTotPay
     CALL    WriteString                     ; display total payment
 
-    MOV     EAX , totalPay                  ; move totalPay value into EAX
-    CALL    WriteDec                        ; display totalPay
+    MOV     AX , record_sub_total_cost      ; move record_sub_total_cost value into AX
+    CALL    WriteDec                        ; display record_sub_total_cost
+
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf                            ; go new line
 
     MOV     EDX , OFFSET line5              ; LEA EDX , line5
@@ -2166,12 +2923,13 @@ displayDis:
 ;--------------------------------PROMPT USER SELECT DIGIT OF CASH VALUE--------------------------
 
 selectCash:
-
+    
+    MOV     totalAmount , 0                 ; move 0 into totalAmount to reset the value equal 0
     MOV     displayTitle , 2                ; move 1 into displayTitle
     JMP     sysMenu                         ; and force jump to sysMenu in order to display sysMenu
 
 cash:
-
+    
     MOV     EDX , OFFSET line1              ; LEA EDX , line1
     CALL    WriteString                     ; display line1 ///////////////
     CALL    Crlf                            ; go new line
@@ -2201,7 +2959,7 @@ cash:
     MOV     EDX , OFFSET outputRM100        ; LEA EDX , outputRM100
     CALL    WriteString                     ; prompt the user enter quantity of RM 100
 
-    MOV     EAX, qtyRM100                   ; move qtyRM100 into EAX
+    MOV     AL , qtyRM100                   ; move qtyRM100 into AL
     CALL    ReadInt                         ; read the user input the quantity of RM 100
 
     MOV     EDX , OFFSET line6              ; LEA EDX , line6
@@ -2209,11 +2967,13 @@ cash:
 
 ;------------------------CALCULATE MUL THE QTY OF THE RM 100.00----------------------------------
 
-    MOV     EBX , 100                       ; move 100 into EBX , EBX = multiplier (operand)
-    MUL     EBX                             ; EAX = qtyRM100 , EBX * EAX => EDX:EAX
-    MOV     amountRM100 , EAX               ; store EAX value into amountRM100 variable
+    MOV     BL , 100                        ; move 100 into BL , BL = multiplier (operand)
+    MUL     BL                              ; AL = qtyRM100 , BL * AL => AX
+    MOV     amountRM100 , AX                ; store AX value into amountRM100 variable
 
     CALL    WriteDec                        ; display the quantity of amountRM100
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf                            ; go new line
 
     MOV     EDX , OFFSET line2              ; LEA EDX , line2
@@ -2225,7 +2985,7 @@ cash:
     MOV     EDX , OFFSET outputRM50         ; LEA EDX , outputRM50
     CALL    WriteString                     ; prompt the user enter quantity of RM 50
 
-    MOV     EAX, qtyRM50                    ; move qtyRM50 into EAX
+    MOV     AL, qtyRM50                     ; move qtyRM50 into AL
     CALL    ReadInt                         ; read the user input the quantity of RM 50
 
     MOV     EDX , OFFSET line6              ; LEA EDX , line6
@@ -2233,11 +2993,13 @@ cash:
 
 ;---------------------------CALCULATE MUL THE QTY OF THE RM 50.00--------------------------------
 
-    MOV     EBX , 50                        ; move 50 into EBX , EBX = multiplier (operand)
-    MUL     EBX                             ; EAX = qtyRM50 , EAX * EAX => EDX:EAX
-    MOV     amountRM50 , EAX                ; store EAX value into amountRM50 variable
+    MOV     BL , 50                         ; move 50 into BL , BL = multiplier (operand)
+    MUL     BL                              ; AL = qtyRM50 , BL * AL => AX
+    MOV     amountRM50 , AX                 ; store AX value into amountRM50 variable
 
     CALL    WriteDec                        ; display the quantity of amountRM50
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf                            ; go new line
 
     MOV     EDX , OFFSET line2              ; LEA EDX , line2
@@ -2249,7 +3011,7 @@ cash:
     MOV     EDX , OFFSET outputRM10         ; LEA EDX , outputRM10
     CALL    WriteString                     ; prompt the user enter quantity of RM 10
 
-    MOV     EAX, qtyRM10                    ; move qtyRM50 into EAX
+    MOV     AL , qtyRM10                    ; move qtyRM50 into AL
     CALL    ReadInt                         ; read the user input the quantity of RM 10
 
     MOV     EDX , OFFSET line6              ; LEA EDX , line6
@@ -2258,11 +3020,13 @@ cash:
 
 ;----------------------------CALCULATE MUL THE QTY OF THE RM 10.00-------------------------------
 
-    MOV     EBX , 10                        ; move 10 into EBX , EBX = multiplier (operand)
-    MUL     EBX                             ; EAX = qtyRM10 , EAX * EAX => EDX:EAX
-    MOV     amountRM10 , EAX                ; store EAX value into amountRM10 variable
+    MOV     BL , 10                         ; move 10 into BL , BL = multiplier (operand)
+    MUL     BL                              ; AL = qtyRM10 , BL * AL => AX
+    MOV     amountRM10 , AX                 ; store AX value into amountRM10 variable
 
     CALL    WriteDec                        ; display the quantity of amountRM10
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf                            ; go new line
 
     MOV     EDX , OFFSET line2              ; LEA EDX , line2
@@ -2274,7 +3038,7 @@ cash:
     MOV     EDX , OFFSET outputRM5          ; LEA EDX , outputRM5
     CALL    WriteString                     ; prompt the user enter quantity of RM 5
 
-    MOV     EAX, qtyRM5                     ; move qtyRM50 into EAX
+    MOV     AL, qtyRM5                      ; move qtyRM50 into AL
     CALL    ReadInt                         ; read the user input the quantity of RM 5
 
     MOV     EDX , OFFSET line6              ; LEA EDX , line6
@@ -2282,11 +3046,13 @@ cash:
 
 ;----------------------------CALCULATE MUL THE QTY OF THE RM 5.00--------------------------------
 
-    MOV     EBX , 5                         ; move 5 into EBX , EBX = multiplier (operand)
-    MUL     EBX                             ; EAX = qtyRM5 , EAX * EAX => EDX:EAX
-    MOV     amountRM5 , EAX                 ; store EAX value into amountRM5 variable
+    MOV     BL , 5                          ; move 5 into BL , BL = multiplier (operand)
+    MUL     BL                              ; AL = qtyRM5 , BL * AL => AX
+    MOV     amountRM5 , AX                  ; store AX value into amountRM5 variable
 
     CALL    WriteDec                        ; display the quantity of amountRM5
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf                            ; go new line
 
     MOV     EDX , OFFSET line2              ; LEA EDX , line2
@@ -2298,7 +3064,7 @@ cash:
     MOV     EDX , OFFSET outputRM1          ; LEA EDX , outputRM1
     CALL    WriteString                     ; prompt the user enter quantity of RM 1
 
-    MOV     EBX, qtyRM1                     ; move qtyRM50 into EAX
+    MOV     AL , qtyRM1                     ; move qtyRM50 into AL
     CALL    ReadInt                         ; read the user input the quantity of RM 1
 
     MOV     EDX , OFFSET line6              ; LEA EDX , line6
@@ -2306,11 +3072,13 @@ cash:
 
 ;----------------------------CALCULATE MUL THE QTY OF THE RM 1.00--------------------------------
 
-    MOV     EBX , 1                         ; move 1 into EBX , EBX = multiplier (operand)
-    MUL     EBX                             ; EAX = qtyRM1 , EAX * EAX => EDX:EAX
-    MOV     amountRM1 , EAX                 ; store EAX value into amountRM1 variable
+    MOV     BL , 1                          ; move 1 into BL , BL = multiplier (operand)
+    MUL     BL                              ; AL = qtyRM1 , BL * AL => AX
+    MOV     amountRM1 , AX                  ; store AX value into amountRM1 variable
 
     CALL    WriteDec                        ; display the quantity of amountRM5
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf                            ; go new line
 
     MOV     EDX , OFFSET line2              ; LEA EDX , line2
@@ -2328,15 +3096,18 @@ cash:
 
 ;-----------------------------CALCULATE ADD ALL THE CASH VALUE-----------------------------------
 
-    MOV     EAX , totalAmount               ; move totalAmount into totalAmount
-    ADD     EAX , amountRM100               ; ADD amountRM100 value into totalAmount
-    ADD     EAX , amountRM50                ; ADD amountRM50 value into totalAmount
-    ADD     EAX , amountRM10                ; ADD amountRM10 value into totalAmount
-    ADD     EAX , amountRM5                 ; ADD amountRM5 value into totalAmount
-    ADD     EAX , amountRM1                 ; ADD amountRM1 value into totalAmount
+    MOV     AX , totalAmount                ; move totalAmount into totalAmount
+    ADD     AX , amountRM100                ; ADD amountRM100 value into totalAmount
+    ADD     AX , amountRM50                 ; ADD amountRM50 value into totalAmount
+    ADD     AX , amountRM10                 ; ADD amountRM10 value into totalAmount
+    ADD     AX , amountRM5                  ; ADD amountRM5 value into totalAmount
+    ADD     AX , amountRM1                  ; ADD amountRM1 value into totalAmount
 
     CALL    WriteDec                        ; display the final totalAmount
-    MOV     totalAmount , EAX               ; store the EAX value into totalAmount
+    MOV     totalAmount , AX                ; store the AX value into totalAmount
+
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf                            ; go new line
 
     MOV     EDX , OFFSET line2              ; LEA EDX , line2
@@ -2346,8 +3117,11 @@ cash:
     MOV     EDX , OFFSET outputTotPay       ; LEA EDX , outputTotPay
     CALL    WriteString                     ; display output total payment
 
-    MOV     EAX , totalPay                  ; MOV totalPay value into totalPay
+    MOV     AX , record_sub_total_cost      ; MOV record_sub_total_cost value into AX
     CALL    WriteDec                        ; display output total payment
+
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf                            ; go new line
 
     MOV     EDX , OFFSET line4              ; LEA EDX , line4
@@ -2355,16 +3129,19 @@ cash:
     CALL    Crlf                            ; go new line
 
 ;------------------------------CALCULATE SUB TOTAL AMOUNT AND PAYMENT----------------------------
-
-    MOV     EAX , totalAmount               ; move totalAmount into totalAmount
-    SUB     EAX , totalPay                  ; minus total payment with total amount
-    MOV     balance , EAX                   ; store EAX value into balance
+    
+    MOV     AX , totalAmount                ; move totalAmount into totalAmount
+    SUB     AX , record_sub_total_cost      ; minus total payment with total amount
+    MOV     balance , AX
 
     LEA     EDX , outputBalance             ; MOV EDX , OFFSET outputBalance
     CALL    WriteString                     ; display output balance
 
-    MOV     EAX , balance                   ; MOV balance value into EAX
+    MOVSX   EAX, balance                    ; move balance value into EAX
     CALL    WriteInt                        ; display balance amount
+
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf
 
     MOV     EDX , OFFSET line5              ; LEA EDX , line5
@@ -2386,7 +3163,8 @@ cash:
 
 ;-------------------------------COMPARE THE PAYMENT AMOUNT VALUE---------------------------------
 
-    CMP     EAX , 0                         ; compare totalPay with 0
+    CMP     AX , balance                     ; move balance value into AX
+    CMP     AX , 0                           ; compare balance with 0
     JGE     success                         ; jump to success if greater or equal to 0
     JMP     unsuccess                       ; else jump to unsuccess
 
@@ -2430,7 +3208,7 @@ success:
 
 receipt:
 
-    CALL Clrscr                             ; clear screen
+    CALL    Clrscr                          ; clear screen
     MOV     EDX , OFFSET line1              ; LEA EDX , line1
     CALL    WriteString                     ; display line1 ///////////////
     CALL    Crlf                            ; go new line
@@ -2475,7 +3253,7 @@ receipt:
     MOV     EDX , OFFSET outputName         ; LEA EDX , outputName
     CALL    WriteString                     ; display output cashier name
 
-    MOV EDX , OFFSET user                   ; LEA EDX , user
+    MOV     EDX , OFFSET user               ; LEA EDX , user
     CALL    WriteString                     ; display the cashier name
     CALL    Crlf                            ; go new line
 
@@ -2600,8 +3378,11 @@ displayBank:
     MOV     EDX , OFFSET outputAmt          ; LEA EDX , outputAmt
     CALL    WriteString                     ; display output total amount RM
 
-    MOV     EAX , totalAmount               ; move totalAmount value into EAX
+    MOV     AX , totalAmount                ; move totalAmount value into AX
     CALL    WriteDec                        ; display output total amount
+
+    MOV     EDX , OFFSET coin               ; LEA EDX , coin
+    CALL    WriteString                     ; display coin value .00
     CALL    Crlf                            ; go new line
 
     MOV     EDX , OFFSET line2              ; LEA EDX , line2
@@ -2647,7 +3428,15 @@ displayBank:
     CALL    Crlf                            ; go new line
 
     CALL    WaitMsg                         ; display waits for the user to press the Enter key
-; |_____________________ Chun Shen _____________________|   | Data
+
+    MOV     displayTitle , 0                ; to reset the displayTitle value to zero
+    MOV     invalidData , 0                 ; to reset the invalidData value to zero
+    MOV     request , 0                     ; to reset the request value to zero
+
+    JMP     designTitle                     ; go back to begining Menu = Login ---------------(Chuan Yan)
+
+; |_____________________ Chun Shen _____________________|   | Proc
+
 quit:
     exit
 main endp
