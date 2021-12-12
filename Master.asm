@@ -23,13 +23,13 @@ INCLUDE macros.inc
     design9         byte    "                                       //             Sign Up Page             //" , 0
     design10        byte    "                                       //             Login Page               //" , 0
     design11         byte    "        //" , 0
-    menu            byte    "                                       //            1. Create User            //" , 0
+    menu            byte    "                                       //            1. Sign Up                //" , 0
     menu1           byte    "                                       //            2. Login                  //" , 0
     menu2           byte    "                                       //      1. Move to New Username.        //" , 0
     menu3           byte    "                                       //      2. Move to New Password.        //" , 0
     menu4           byte    "                                       //      3. Move to Confirm Password.    //" , 0
     menu5           byte    "                                       //      4. Move to Login.               //" , 0
-    menu6           byte    "                                       //      1. Move to Create User.         //" , 0
+    menu6           byte    "                                       //      1. Move to Sign Up.             //" , 0
     menu7           byte    "                                       //      2. Move to Username.            //" , 0
     menu8           byte    "                                       //      3. Move to Password.            //" , 0
     menu9           byte    "                                       //      2. Move to Login.               //" , 0
@@ -2657,8 +2657,8 @@ back1:
 
     MOV     AL , 2                          ; else move 2 value to AL to reset the value for select cash digit
     CMP     request , AL                    ; compare request to AL
-    JE      inputMenu                       ; jump to inputMenu if request is equal to AL
-    JMP     resetVar                        ; else jump to the resetVar = Menu------------------------------------------(Pin Chee)
+    JE      resetVar                        ; jump to resetVar = Menu------------------------------------------(Pin Chee)
+    JMP     inputMenu                       ; else jump to the inputMenu
 
 ;------------------------------PROMPT THE USER ENTER CARD ACCOUNT NUMBER-------------------------
 
@@ -3433,6 +3433,7 @@ displayBank:
     MOV     invalidData , 0                 ; to reset the invalidData value to zero
     MOV     request , 0                     ; to reset the request value to zero
 
+    CALL    Clrscr                          ; clear screen
     JMP     designTitle                     ; go back to begining Menu = Login ---------------(Chuan Yan)
 
 ; |_____________________ Chun Shen _____________________|   | Proc
